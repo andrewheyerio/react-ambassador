@@ -19,8 +19,9 @@ const Nav = (props: any) => {
 
     if (props.user?.id) {
         menu = (
-            <div className="col-md-3 text-end">
-                <Link to={"/stats"} type="button" className="btn btn-outline-primary me-2">Stats</Link>
+            <div className="col-md-5 text-end">
+                <a href={"/rankings"} type="button" className=" text-center ">Rankings</a>
+                <a href={"/stats"} type="button" className=" text-center ">Stats</a>
                 <a type="button" className="btn btn-outline-primary me-2"
                 onClick={logout}
                 >Logout</a>
