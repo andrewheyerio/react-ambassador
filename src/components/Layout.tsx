@@ -24,9 +24,10 @@ const Layout = (props: any) => {
         )();
     }, []);
 
+    // This snippet essentially is telling us only had the money header, (think of wordpress banner) should appear
+    // on the home page or the backend page, nothing else. 
     let header;
-
-    if (location.pathname === '/' || location.pathname === 'backend') {
+    if (location.pathname === '/' || location.pathname === '/backend') {
         header = <Header/>
     }
 
