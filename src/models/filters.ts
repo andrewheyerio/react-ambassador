@@ -1,3 +1,4 @@
 export interface Filters {
-    s: string
+    s: string;
+    sort: string;
 }
