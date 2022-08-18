@@ -11,7 +11,10 @@ const ProductsFrontend = () => {
     const [filters, setFilters] = useState<Filters>({
         s: '',
         sort: '',
-    })
+        page: 1,
+    });
+    const [lastPage, setLastPage] = useState(0)
+    const perPage = 9;
 
 
     useEffect( () => {
@@ -20,6 +23,7 @@ const ProductsFrontend = () => {
                 const {data} = await axios.get('products/frontend')
                 setAllProducts(data)
                 setFilteredProducts(data)
+                setLastPage(Math.ceil(data.length  / perPage))
 
             }
         )()
@@ -51,15 +55,15 @@ const ProductsFrontend = () => {
                 return 0
             })
         }
-
-        setFilteredProducts(products)
+        setLastPage(Math.ceil(products.length  / perPage))
+        setFilteredProducts(products.slice(0, filters.page*perPage));
     }, [filters])
 
 
 
     return (
         <Layout>
-            <Products products={filteredProducts} filters={filters} setFilters={setFilters}/>
+            <Products products={filteredProducts} filters={filters} setFilters={setFilters} lastPage={lastPage}/>
         </Layout>
     );
 };

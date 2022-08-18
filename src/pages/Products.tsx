@@ -4,9 +4,10 @@ import {Filters} from "../models/filters";
 
 
 const Products = (props: {
-    products: Product[]
+    products: Product[],
     filters: Filters,
-    setFilters: (filters: Filters) => void
+    setFilters: (filters: Filters) => void,
+    lastPage: number
 }) => {
 
     // We use an input with onKeyUp to get the string from the HTML form, pass it to this function. This function
@@ -16,6 +17,7 @@ const Products = (props: {
     const search = (s: string) => {
         props.setFilters({
             ...props.filters,
+            page: 1, // the reason we set this to 1 here & on sort is b/c we need to clear the products array on the backend setProducts call to work right.
             s
         })
     }
@@ -24,8 +26,26 @@ const Products = (props: {
     const sort = (sort: string) => {
         props.setFilters({
             ...props.filters,
+            page: 1,
             sort
         })
+    }
+
+    const load = () => {
+        props.setFilters({
+            ...props.filters,
+            page: props.filters.page + 1
+        })
+    }
+
+    let button;
+
+    if (props.filters.page != props.lastPage) {
+        button = (
+            <div className={"d-flex justify-content-center mt-4"}>
+                <button className={"btn btn-primary"} onClick={load}>Load More</button>
+            </div>
+        )
     }
 
     return (
@@ -61,8 +81,8 @@ const Products = (props: {
                         </div>
                     )
                 })}
-
             </div>
+            {button}
         </>
     );
 };
