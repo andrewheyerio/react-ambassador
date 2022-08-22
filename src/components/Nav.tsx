@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {Link, Navigate} from 'react-router-dom';
 import axios from "axios";
 import {setUser} from "../redux/actions/setUserAction";
+import { NavLink } from 'react-router-dom';
 
 const Nav = (props: any) => {
 
@@ -19,7 +20,9 @@ const Nav = (props: any) => {
 
     if (props.user?.id) {
         menu = (
-            <div className="col-md-3 text-end">
+            <div className="col-md-5 text-end">
+                <a href={"/rankings"} type="button" className=" text-center ">Rankings</a>
+                <a href={"/stats"} type="button" className=" text-center ">Stats</a>
                 <a type="button" className="btn btn-outline-primary me-2"
                 onClick={logout}
                 >Logout</a>
@@ -42,11 +45,9 @@ const Nav = (props: any) => {
 
 
                 <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" className="nav-link px-2 link-secondary">Frontend</a></li>
-                    <li><a href="#" className="nav-link px-2 link-dark">Backend</a></li>
-
+                    <li><NavLink to={'/'} className="nav-link px-2 link-secondary">Frontend</NavLink></li>
+                    <li><NavLink to={'/backend'} className="nav-link px-2 link-dark">Backend</NavLink></li>
                 </ul>
-
                 {menu}
             </header>
         </div>
