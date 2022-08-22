@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Product} from "../models/product";
 import {Filters} from "../models/filters";
+import axios from "axios";
 
 
 const Products = (props: {
@@ -11,6 +12,11 @@ const Products = (props: {
 }) => {
 
     const [selected, setSelected] = useState<number[]>([])
+    const [notify, setNotify] = useState({
+        show: false,
+        error: false,
+        message: ''
+    })
 
     // We use an input with onKeyUp to get the string from the HTML form, pass it to this function. This function
     // calls a function passed to it as a prop, from the Products Frontend and Products backend. This way this page
@@ -58,6 +64,35 @@ const Products = (props: {
         }
     }
 
+    const generate = async () => {
+        try {
+            const {data} = await axios.post('links', {
+                products: selected
+            });
+
+            setNotify({
+                show: true,
+                error: false,
+                message: `Link generated: http//locatlhost:5000/${data.code}`
+            })
+        } catch (e) {
+            setNotify({
+                show: true,
+                error: true,
+                message: 'Error has occured'
+            })
+        } finally {
+            setTimeout(() => {
+                setNotify({
+                    show: false,
+                    error: false,
+                    message: ''
+                })
+            }, 3000);
+        }
+    }
+
+
     let button;
 
     if (props.filters.page !== props.lastPage) {
@@ -68,12 +103,35 @@ const Products = (props: {
         )
     }
 
+    let generateButton, info;
+
+    // If the size of the array we use to keep tracked of selected cards is not empty, then show the button
+    if(selected.length > 0 ) {
+        generateButton = (
+            <div className={"input-group-append"}>
+                <button className={"bth btn-info"} onClick={generate}>Generate Link</button>
+            </div>
+        )
+    }
+
+    if (notify.show) {
+        info = (
+            <div className={"col-md-12 mb-4"}>
+                <div className={notify.error ? "alert alert-danger" : "alert alert-info"} role={"alert"}>
+                    {notify.message}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <>
+            {info}
+
             <div className="col-nmd-12 mb-4 input-group">
                 <input type={"text"} className={"form-control"} placeholder={"Search"}
                 onChange={e => search(e.target.value)}/>
-
+                {generateButton}
                 <div className={"input-group-append"}>
                     <select className={"form-select"}
                             onChange={e => sort(e.target.value)}>
